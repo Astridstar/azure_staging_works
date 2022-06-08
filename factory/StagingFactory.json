@@ -1,0 +1,9 @@
+{
+	"name": "StagingFactory",
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d85d5e09-ecec-4e6d-b2b0-a337800b52e3",
+		"tenantId": "2d62315f-4ea7-436d-a950-023c98b37b83"
+	}
+}
