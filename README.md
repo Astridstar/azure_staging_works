@@ -1,0 +1,1 @@
+# azure_staging_works
