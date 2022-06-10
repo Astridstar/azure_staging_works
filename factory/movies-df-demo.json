@@ -1,0 +1,9 @@
+{
+	"name": "movies-df-demo",
+	"location": "japaneast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "0b5ac635-17e0-4657-b760-ab48f964d1a3",
+		"tenantId": "2d62315f-4ea7-436d-a950-023c98b37b83"
+	}
+}
