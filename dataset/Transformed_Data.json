@@ -1,0 +1,417 @@
+{
+	"name": "Transformed_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "transformed_data/transformed_data",
+				"container": "raw-data"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "user_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "year",
+				"type": "INT32"
+			},
+			{
+				"name": "month",
+				"type": "INT32"
+			},
+			{
+				"name": "growth",
+				"type": "INT32"
+			},
+			{
+				"name": "sessions_per_user_per_month",
+				"type": "INT64"
+			},
+			{
+				"name": "avg_session_duration_per_user_per_month",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "avg_conversion_rate_per_user_per_month",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "avg_order_value_per_user_per_month",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "avg_cart_abandon_rate",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "brand_acer_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_apple_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_asus_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_casio_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_lenovo_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_apple_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_lenovo_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_acer_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_asus_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_casio_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_acer_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_apple_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_asus_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_casio_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_lenovo_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_apple_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_acer_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_lenovo_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_asus_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_casio_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_acer_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_apple_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_asus_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_lenovo_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_samsung_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "brand_apple_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_acer_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_lenovo_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_asus_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "brand_samsung_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_audio_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_clocks_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_smartphone_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_tablet_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_telephone_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_audio_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_clocks_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_smartphone_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_tablet_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_telephone_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_audio_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_clocks_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_smartphone_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_tablet_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_telephone_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_audio_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_clocks_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_smartphone_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_tablet_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_telephone_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_audio_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_clocks_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_smartphone_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_tablet_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_telephone_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "subcategory_audio_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_clocks_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_smartphone_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_tablet_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "subcategory_telephone_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_100011103_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_100023514_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307545_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307589_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_5100855_viewed_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307545_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_5100855_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_100023514_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_1307589_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_100011103_viewed_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_100011103_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307545_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307589_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_5100562_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_5100855_added_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307545_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_5100855_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_5100562_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_100011103_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_1307589_added_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_1307545_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307589_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_5100337_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_5100562_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_5100855_purchased_count",
+				"type": "INT64"
+			},
+			{
+				"name": "product_id_1307545_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_5100855_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_5100562_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_1307589_purchased_binary",
+				"type": "INT32"
+			},
+			{
+				"name": "product_id_5100337_purchased_binary",
+				"type": "INT32"
+			}
+		]
+	}
+}
