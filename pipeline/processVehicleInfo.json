@@ -14,11 +14,7 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [
-					{
-						"name": ""
-					}
-				],
+				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "VehicleSet",
