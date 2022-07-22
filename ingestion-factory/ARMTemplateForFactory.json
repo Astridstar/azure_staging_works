@@ -15,6 +15,14 @@
 			"type": "string",
 			"defaultValue": "https://kvsqq267aknc6xi.vault.azure.net/"
 		},
+		"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_directory": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_file": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
 		"VehLandindZoneIngestion_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
@@ -176,12 +184,15 @@
 							"referenceName": "processVehicleInfo",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"directory": "[parameters('VehLandindZoneIngestion_properties_processVehicleInfo_parameters_directory')]",
+							"file": "[parameters('VehLandindZoneIngestion_properties_processVehicleInfo_parameters_file')]"
+						}
 					}
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/landingzone/blobs/vehicle/",
+					"blobPathBeginsWith": "/landingzone/blobs/vehicles/",
 					"blobPathEndsWith": ".csv",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('VehLandindZoneIngestion_properties_typeProperties_scope')]",

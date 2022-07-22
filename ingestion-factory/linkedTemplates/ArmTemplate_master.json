@@ -15,6 +15,14 @@
 			"type": "string",
 			"defaultValue": "https://kvsqq267aknc6xi.vault.azure.net/"
 		},
+		"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_directory": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_file": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
 		"VehLandindZoneIngestion_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
@@ -51,6 +59,12 @@
 					},
 					"VehLandingZoneStorage_properties_typeProperties_url": {
 						"value": "[parameters('VehLandingZoneStorage_properties_typeProperties_url')]"
+					},
+					"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_directory": {
+						"value": "[parameters('VehLandindZoneIngestion_properties_processVehicleInfo_parameters_directory')]"
+					},
+					"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_file": {
+						"value": "[parameters('VehLandindZoneIngestion_properties_processVehicleInfo_parameters_file')]"
 					},
 					"VehLandindZoneIngestion_properties_typeProperties_scope": {
 						"value": "[parameters('VehLandindZoneIngestion_properties_typeProperties_scope')]"
