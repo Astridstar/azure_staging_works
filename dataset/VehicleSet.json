@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Transportation_Network_Providers_-_Vehicles.csv",
 				"folderPath": "vehicles",
 				"fileSystem": "landingzone"
 			},
