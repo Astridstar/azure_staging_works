@@ -18,11 +18,7 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "VehicleSet",
-						"type": "DatasetReference",
-						"parameters": {
-							"directory": "@pipeline().parameters.file",
-							"container": "@pipeline().parameters.directory"
-						}
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"itemName"
@@ -62,11 +58,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": {
-								"value": "@pipeline().parameters.directory",
-								"type": "Expression"
-							},
-							"wildcardFileName": "@pipeline().parameters.file",
+							"wildcardFolderPath": "@pipeline().parameters.directory",
+							"wildcardFileName": "*.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -74,17 +67,26 @@
 						}
 					},
 					"sink": {
-						"type": "JsonSink",
+						"type": "DelimitedTextSink",
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "MergeFiles"
+							"copyBehavior": "PreserveHierarchy"
 						},
 						"formatSettings": {
-							"type": "JsonWriteSettings",
-							"filePattern": "arrayOfObjects"
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
 						}
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
@@ -97,7 +99,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "MovedFile",
+						"referenceName": "StagedVehicle",
 						"type": "DatasetReference"
 					}
 				]
