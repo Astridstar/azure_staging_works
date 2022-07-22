@@ -39,7 +39,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Get Metadata1",
+						"name": "Get trigger information",
 						"description": "Get meta info",
 						"type": "GetMetadata",
 						"dependsOn": [],
@@ -56,8 +56,8 @@
 								"referenceName": "VehicleSet",
 								"type": "DatasetReference",
 								"parameters": {
-									"directory": "@triggerBody().folderPath",
-									"container": "@triggerBody().fileName"
+									"directory": "@pipeline().parameters.file",
+									"container": "@pipeline().parameters.directory"
 								}
 							},
 							"fieldList": [
@@ -72,6 +72,73 @@
 								"type": "DelimitedTextReadSettings"
 							}
 						}
+					},
+					{
+						"name": "Test Data Access",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Get trigger information",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": {
+										"value": "@pipeline().parameters.directory",
+										"type": "Expression"
+									},
+									"wildcardFileName": "@pipeline().parameters.file",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings",
+									"filePattern": "arrayOfObjects"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "VehicleSet",
+								"type": "DatasetReference",
+								"parameters": {
+									"directory": "@pipeline().parameters.file",
+									"container": "@pipeline().parameters.directory"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "MovedFile",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"concurrency": 1,
@@ -92,7 +159,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/VehicleSet')]"
+				"[concat(variables('factoryId'), '/datasets/VehicleSet')]",
+				"[concat(variables('factoryId'), '/datasets/MovedFile')]"
 			]
 		},
 		{
@@ -203,6 +271,29 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/processVehicleInfo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MovedFile')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "VehLandingZoneStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "staged"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneStorage')]"
 			]
 		}
 	]
