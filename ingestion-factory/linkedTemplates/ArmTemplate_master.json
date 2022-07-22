@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "ingestion-factory"
 		},
-		"VehLandingZoneVault_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://kvsqq267aknc6xi.vault.azure.net/"
-		},
 		"VehLandingZoneStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://synsqq267aknc6xi.dfs.core.windows.net/"
+		},
+		"VehLandingZoneVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvsqq267aknc6xi.vault.azure.net/"
 		},
 		"VehLandindZoneIngestion_properties_typeProperties_scope": {
 			"type": "string",

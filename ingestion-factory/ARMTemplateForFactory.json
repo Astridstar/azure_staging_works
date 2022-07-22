@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "ingestion-factory"
 		},
-		"VehLandingZoneVault_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://kvsqq267aknc6xi.vault.azure.net/"
-		},
 		"VehLandingZoneStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://synsqq267aknc6xi.dfs.core.windows.net/"
+		},
+		"VehLandingZoneVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvsqq267aknc6xi.vault.azure.net/"
 		},
 		"VehLandindZoneIngestion_properties_typeProperties_scope": {
 			"type": "string",
@@ -24,43 +24,6 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/VehLandingZoneVault')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureKeyVault",
-				"typeProperties": {
-					"baseUrl": "[parameters('VehLandingZoneVault_properties_typeProperties_baseUrl')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/VehLandingZoneStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('VehLandingZoneStorage_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "AzureKeyVaultSecret",
-						"store": {
-							"referenceName": "VehLandingZoneVault",
-							"type": "LinkedServiceReference"
-						},
-						"secretName": "veh-ingest-df",
-						"secretVersion": "b49fbc1ac44240929d036a3a06e60716"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneVault')]"
-			]
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/processVehicleInfo')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -85,8 +48,8 @@
 								"referenceName": "VehicleSet",
 								"type": "DatasetReference",
 								"parameters": {
-									"directory": "temp",
-									"container": "dev"
+									"directory": "@triggerBody().folderPath",
+									"container": "@triggerBody().fileName"
 								}
 							},
 							"fieldList": [
@@ -94,6 +57,7 @@
 							],
 							"storeSettings": {
 								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
 								"enablePartitionDiscovery": false
 							},
 							"formatSettings": {
@@ -106,6 +70,16 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"directory": {
+						"type": "string",
+						"defaultValue": "@triggerBody.folderPath"
+					},
+					"file": {
+						"type": "string",
+						"defaultValue": "@triggerBody().fileName"
+					}
 				},
 				"annotations": []
 			},
@@ -151,6 +125,43 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneStorage')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VehLandingZoneStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('VehLandingZoneStorage_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "VehLandingZoneVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "veh-ingest-df",
+						"secretVersion": "b49fbc1ac44240929d036a3a06e60716"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VehLandingZoneVault')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('VehLandingZoneVault_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/VehLandindZoneIngestion')]",

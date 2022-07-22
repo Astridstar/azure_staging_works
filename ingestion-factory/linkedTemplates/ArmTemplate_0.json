@@ -124,8 +124,8 @@
 								"referenceName": "VehicleSet",
 								"type": "DatasetReference",
 								"parameters": {
-									"directory": "temp",
-									"container": "dev"
+									"directory": "@triggerBody().folderPath",
+									"container": "@triggerBody().fileName"
 								}
 							},
 							"fieldList": [
@@ -133,6 +133,7 @@
 							],
 							"storeSettings": {
 								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
 								"enablePartitionDiscovery": false
 							},
 							"formatSettings": {
@@ -145,6 +146,16 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"directory": {
+						"type": "string",
+						"defaultValue": "@triggerBody.folderPath"
+					},
+					"file": {
+						"type": "string",
+						"defaultValue": "@triggerBody().fileName"
+					}
 				},
 				"annotations": []
 			},
