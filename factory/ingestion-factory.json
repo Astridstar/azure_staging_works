@@ -1,0 +1,9 @@
+{
+	"name": "ingestion-factory",
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d5e6522a-f0c7-49fd-a8ba-4243815fd4e2",
+		"tenantId": "cac5c443-ebb1-48e0-8130-1acb3790c9dd"
+	}
+}
