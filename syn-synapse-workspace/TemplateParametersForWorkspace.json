@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "syn-synapse-workspace"
+		},
+		"syn-synapse-workspace-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"VehLandingZone_properties_typeProperties_url": {
+			"value": "https://synsqq267aknc6xi.dfs.core.windows.net/"
+		},
+		"VehLandingZoneVault_properties_typeProperties_baseUrl": {
+			"value": "https://kvsqq267aknc6xi.vault.azure.net/"
+		},
+		"syn-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://synsqq267aknc6xi.dfs.core.windows.net"
+		},
+		"VehLandindZoneTrigger_properties_processVehicleInspection_parameters_directory": {
+			"value": "@triggerBody().folderPath"
+		},
+		"VehLandindZoneTrigger_properties_processVehicleInspection_parameters_file": {
+			"value": "@triggerBody().fileName"
+		},
+		"VehLandindZoneTrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
+		}
+	}
+}
