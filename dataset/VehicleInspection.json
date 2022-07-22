@@ -1,0 +1,62 @@
+{
+	"name": "VehicleInspection",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VehLandingZone",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Transportation_Network_Providers_-_Vehicles.csv",
+				"folderPath": "vehicles",
+				"fileSystem": "landingzone"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"nullValue": "null",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "MONTH_REPORTED",
+				"type": "String"
+			},
+			{
+				"name": "STATE",
+				"type": "String"
+			},
+			{
+				"name": "MAKE",
+				"type": "String"
+			},
+			{
+				"name": "MODEL",
+				"type": "String"
+			},
+			{
+				"name": "COLOR",
+				"type": "String"
+			},
+			{
+				"name": "YEAR",
+				"type": "String"
+			},
+			{
+				"name": "LAST_INSPECTION_MONTH",
+				"type": "String"
+			},
+			{
+				"name": "NUMBER_OF_TRIPS",
+				"type": "String"
+			},
+			{
+				"name": "MULTIPLE_TNPS",
+				"type": "String"
+			}
+		]
+	}
+}
