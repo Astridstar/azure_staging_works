@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
+				"name": "Get trigger information",
 				"description": "Get meta info",
 				"type": "GetMetadata",
 				"dependsOn": [],
@@ -20,8 +20,8 @@
 						"referenceName": "VehicleSet",
 						"type": "DatasetReference",
 						"parameters": {
-							"directory": "@triggerBody().folderPath",
-							"container": "@triggerBody().fileName"
+							"directory": "@pipeline().parameters.file",
+							"container": "@pipeline().parameters.directory"
 						}
 					},
 					"fieldList": [
@@ -29,6 +29,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
