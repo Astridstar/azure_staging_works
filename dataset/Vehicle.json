@@ -5,6 +5,16 @@
 			"referenceName": "LandingZone",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"directory": {
+				"type": "string",
+				"defaultValue": "temp"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "dev"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
