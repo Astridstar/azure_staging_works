@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "processVehicleInfo",
+					"referenceName": "testVehicleInfo",
 					"type": "PipelineReference"
 				},
 				"parameters": {
