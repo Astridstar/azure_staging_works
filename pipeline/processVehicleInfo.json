@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "Get Metadata1",
+				"description": "Get meta info",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -13,7 +14,11 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": ""
+					}
+				],
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "VehicleSet",
@@ -23,7 +28,9 @@
 							"container": "dev"
 						}
 					},
-					"fieldList": [],
+					"fieldList": [
+						"itemName"
+					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
