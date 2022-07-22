@@ -1,0 +1,19 @@
+{
+	"name": "VehicleStagedZoneStorage",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://synsqq267aknc6xi.dfs.core.windows.net/",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "VehLandingZoneVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "veh-ingest-df",
+				"secretVersion": "b49fbc1ac44240929d036a3a06e60716"
+			}
+		}
+	}
+}
