@@ -10,6 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "vehicles.csv",
+				"folderPath": "vehicles",
 				"fileSystem": "deadzone"
 			},
 			"columnDelimiter": ",",
