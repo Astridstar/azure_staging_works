@@ -79,6 +79,116 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "MONTH_REPORTED",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MONTH_REPORTED",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "STATE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "STATE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MAKE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MAKE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MODEL",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MODEL",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "COLOR",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "COLOR",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "YEAR",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "YEAR",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "LAST_INSPECTION_MONTH",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "LAST_INSPECTION_MONTH",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "NUMBER_OF_TRIPS",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "NUMBER_OF_TRIPS",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MULTIPLE_TNPS",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MULTIPLE_TNPS",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
