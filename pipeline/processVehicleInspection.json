@@ -19,6 +19,13 @@
 						"referenceName": "Vehicle Inspection Source",
 						"type": "DataFlowReference"
 					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "VehLandingZone",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "staged"
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
