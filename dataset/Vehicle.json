@@ -1,10 +1,6 @@
 {
 	"name": "Vehicle",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "LandingZone",
-			"type": "LinkedServiceReference"
-		},
 		"parameters": {
 			"directory": {
 				"type": "string",
