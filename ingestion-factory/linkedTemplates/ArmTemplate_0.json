@@ -15,6 +15,10 @@
 			"type": "string",
 			"defaultValue": "https://synsqq267aknc6xi.dfs.core.windows.net/"
 		},
+		"VehicleStagedZoneStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://synsqq267aknc6xi.dfs.core.windows.net/"
+		},
 		"VehLandindZoneIngestion_properties_processVehicleInfo_parameters_directory": {
 			"type": "string",
 			"defaultValue": "@triggerBody().folderPath"
@@ -70,6 +74,30 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/VehicleStagedZoneStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('VehicleStagedZoneStorage_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "VehLandingZoneVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "veh-ingest-df",
+						"secretVersion": "b49fbc1ac44240929d036a3a06e60716"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneVault')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/VehicleSet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -78,21 +106,12 @@
 					"referenceName": "VehLandingZoneStorage",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"directory": {
-						"type": "string",
-						"defaultValue": "temp"
-					},
-					"container": {
-						"type": "string",
-						"defaultValue": "dev"
-					}
-				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "Transportation_Network_Providers_-_Vehicles.csv",
 						"folderPath": "vehicles",
 						"fileSystem": "landingzone"
 					},
@@ -109,26 +128,32 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/MovedFile')]",
+			"name": "[concat(parameters('factoryName'), '/StagedVehicle')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "VehLandingZoneStorage",
+					"referenceName": "VehicleStagedZoneStorage",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Json",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "staged"
-					}
+						"fileName": "vehicles.csv",
+						"folderPath": "vehicles",
+						"fileSystem": "deadzone"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
 				},
-				"schema": {}
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneStorage')]"
+				"[concat(variables('factoryId'), '/linkedServices/VehicleStagedZoneStorage')]"
 			]
 		},
 		{
@@ -154,10 +179,7 @@
 							"dataset": {
 								"referenceName": "VehicleSet",
 								"type": "DatasetReference",
-								"parameters": {
-									"directory": "@pipeline().parameters.file",
-									"container": "@pipeline().parameters.directory"
-								}
+								"parameters": {}
 							},
 							"fieldList": [
 								"itemName"
@@ -173,7 +195,7 @@
 						}
 					},
 					{
-						"name": "Test Data Access",
+						"name": "Copy Test Data",
 						"type": "Copy",
 						"dependsOn": [
 							{
@@ -185,7 +207,7 @@
 						],
 						"policy": {
 							"timeout": "7.00:00:00",
-							"retry": 0,
+							"retry": 1,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
@@ -196,44 +218,158 @@
 								"type": "DelimitedTextSource",
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
+									"maxConcurrentConnections": 3,
 									"recursive": true,
-									"wildcardFolderPath": {
-										"value": "@pipeline().parameters.directory",
-										"type": "Expression"
-									},
-									"wildcardFileName": "@pipeline().parameters.file",
-									"enablePartitionDiscovery": false
+									"enablePartitionDiscovery": true
 								},
 								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
 								}
 							},
 							"sink": {
-								"type": "JsonSink",
+								"type": "DelimitedTextSink",
 								"storeSettings": {
 									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "MergeFiles"
+									"maxConcurrentConnections": 3,
+									"blockSizeInMB": 4
 								},
 								"formatSettings": {
-									"type": "JsonWriteSettings",
-									"filePattern": "arrayOfObjects"
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
 								}
 							},
-							"enableStaging": false
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "MONTH_REPORTED",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MONTH_REPORTED",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "STATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "STATE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MAKE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MAKE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MODEL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MODEL",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "COLOR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "COLOR",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "YEAR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YEAR",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LAST_INSPECTION_MONTH",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "LAST_INSPECTION_MONTH",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "NUMBER_OF_TRIPS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NUMBER_OF_TRIPS",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MULTIPLE_TNPS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MULTIPLE_TNPS",
+											"type": "String",
+											"physicalType": "String"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
 						},
 						"inputs": [
 							{
 								"referenceName": "VehicleSet",
 								"type": "DatasetReference",
-								"parameters": {
-									"directory": "@pipeline().parameters.file",
-									"container": "@pipeline().parameters.directory"
-								}
+								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "MovedFile",
+								"referenceName": "StagedVehicle",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -259,7 +395,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VehicleSet')]",
-				"[concat(variables('factoryId'), '/datasets/MovedFile')]"
+				"[concat(variables('factoryId'), '/datasets/StagedVehicle')]"
 			]
 		},
 		{
