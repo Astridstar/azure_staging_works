@@ -10,6 +10,9 @@
 		},
 		"VehLandingZoneStorage_properties_typeProperties_url": {
 			"value": "https://synsqq267aknc6xi.dfs.core.windows.net/"
+		},
+		"VehLandindZoneIngestion_properties_typeProperties_scope": {
+			"value": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
 		}
 	}
 }

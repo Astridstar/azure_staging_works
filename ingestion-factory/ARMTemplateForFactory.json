@@ -14,6 +14,10 @@
 		"VehLandingZoneStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://synsqq267aknc6xi.dfs.core.windows.net/"
+		},
+		"VehLandindZoneIngestion_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
 		}
 	},
 	"variables": {
@@ -146,6 +150,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/VehLandingZoneStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VehLandindZoneIngestion')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "processVehicleInfo",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/landingzone/blobs/vehicle/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('VehLandindZoneIngestion_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/processVehicleInfo')]"
 			]
 		}
 	]
