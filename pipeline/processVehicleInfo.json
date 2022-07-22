@@ -91,8 +91,7 @@
 						"referenceName": "VehicleSet",
 						"type": "DatasetReference",
 						"parameters": {
-							"directory": "@pipeline().parameters.file",
-							"container": "@pipeline().parameters.directory"
+							"directory": "@pipeline().parameters.file"
 						}
 					}
 				],
