@@ -8,12 +8,16 @@
 				"pipelineReference": {
 					"referenceName": "processVehicleInfo",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"directory": "@triggerBody().folderPath",
+					"file": "@triggerBody().fileName"
 				}
 			}
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/landingzone/blobs/vehicle/",
+			"blobPathBeginsWith": "/landingzone/blobs/vehicles/",
 			"blobPathEndsWith": ".csv",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi",
