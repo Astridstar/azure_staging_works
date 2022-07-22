@@ -2,11 +2,12 @@
 	"name": "IncomingVehicle",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/incoming/blobs/",
+			"blobPathBeginsWith": "/incoming/blobs/vehicle",
+			"blobPathEndsWith": "*.csv",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi",
 			"events": [
