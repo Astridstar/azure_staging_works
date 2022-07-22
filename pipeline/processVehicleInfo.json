@@ -38,6 +38,16 @@
 			}
 		],
 		"concurrency": 1,
+		"parameters": {
+			"directory": {
+				"type": "string",
+				"defaultValue": "@triggerBody.folderPath"
+			},
+			"file": {
+				"type": "string",
+				"defaultValue": "@triggerBody().fileName"
+			}
+		},
 		"annotations": []
 	}
 }
