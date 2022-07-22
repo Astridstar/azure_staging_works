@@ -14,7 +14,15 @@
 			],
 			"sinks": [
 				{
-					"name": "sink1"
+					"dataset": {
+						"referenceName": "vehinspect",
+						"type": "DatasetReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "VehLandingZone",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [],
@@ -40,10 +48,35 @@
 				"     skipInitialLoad: false,",
 				"     rowUrlColumn: 'FILENAME') ~> VehicleInspectionSource",
 				"VehicleInspectionSource sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
+				"     validateSchema: true,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     batchSize: 100,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     saveOrder: 1) ~> sink1"
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     outputRejectedData: true,",
+				"     outputAssertFailedRows: true,",
+				"     assertFailure_fileSystem: 'deadzone',",
+				"     assertFailure_folderPath: 'vehicles',",
+				"     mapColumn(",
+				"          MONTH_REPORTED,",
+				"          STATE,",
+				"          MAKE,",
+				"          MODEL,",
+				"          COLOR,",
+				"          YEAR,",
+				"          LAST_INSPECTION_MONTH,",
+				"          NUMBER_OF_TRIPS,",
+				"          MULTIPLE_TNPS,",
+				"          FILENAME",
+				"     )) ~> sink1"
 			]
 		}
 	}
