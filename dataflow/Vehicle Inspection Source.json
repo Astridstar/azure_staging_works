@@ -1,0 +1,41 @@
+{
+	"name": "Vehicle Inspection Source",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "VehicleInspection",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          MONTH_REPORTED as date 'yyyy-MM',",
+				"          STATE as string,",
+				"          MAKE as string,",
+				"          MODEL as string,",
+				"          COLOR as string,",
+				"          YEAR as short,",
+				"          LAST_INSPECTION_MONTH as date 'yyyy-MM',",
+				"          NUMBER_OF_TRIPS as short,",
+				"          MULTIPLE_TNPS as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: true,",
+				"     enableCdc: true,",
+				"     mode: 'read',",
+				"     skipInitialLoad: false,",
+				"     rowUrlColumn: 'FILENAME') ~> source1"
+			]
+		}
+	}
+}
