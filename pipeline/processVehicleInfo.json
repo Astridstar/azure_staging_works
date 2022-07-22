@@ -36,6 +36,72 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Test Data Access",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Get trigger information",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@pipeline().parameters.directory",
+								"type": "Expression"
+							},
+							"wildcardFileName": "@pipeline().parameters.file",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "MergeFiles"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings",
+							"filePattern": "arrayOfObjects"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "VehicleSet",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": "@pipeline().parameters.file",
+							"container": "@pipeline().parameters.directory"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "MovedFile",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"concurrency": 1,
