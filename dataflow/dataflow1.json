@@ -1,0 +1,46 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "VehicleSet",
+						"type": "DatasetReference"
+					},
+					"name": "VehicleTable"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          MONTH_REPORTED as string,",
+				"          STATE as string,",
+				"          MAKE as string,",
+				"          MODEL as string,",
+				"          COLOR as string,",
+				"          YEAR as short,",
+				"          LAST_INSPECTION_MONTH as string,",
+				"          NUMBER_OF_TRIPS as short,",
+				"          MULTIPLE_TNPS as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: true,",
+				"     enableCdc: true,",
+				"     mode: 'read',",
+				"     skipInitialLoad: false,",
+				"     rowUrlColumn: 'FILENAME',",
+				"     dateFormats: ['yyyy.MM.dd'],",
+				"     timestampFormats: ['yyyy.MM.dd HH:mm:ss'],",
+				"     preferredIntegralType: 'short',",
+				"     preferredFractionalType: 'double',",
+				"     booleanFormat: ['true', 'false']) ~> VehicleTable"
+			]
+		}
+	}
+}
