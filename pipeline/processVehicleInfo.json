@@ -20,8 +20,8 @@
 						"referenceName": "VehicleSet",
 						"type": "DatasetReference",
 						"parameters": {
-							"directory": "temp",
-							"container": "dev"
+							"directory": "@triggerBody().folderPath",
+							"container": "@triggerBody().fileName"
 						}
 					},
 					"fieldList": [
