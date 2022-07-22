@@ -1,0 +1,16 @@
+{
+	"name": "processVehicleInspection",
+	"properties": {
+		"parameters": {
+			"directory": {
+				"type": "string",
+				"defaultValue": "@triggerBody.folderPath"
+			},
+			"file": {
+				"type": "string",
+				"defaultValue": "@triggerBody().fileName"
+			}
+		},
+		"annotations": []
+	}
+}
