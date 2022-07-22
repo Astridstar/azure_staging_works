@@ -34,16 +34,9 @@
 				}
 			},
 			{
-				"name": "Test Data Access",
+				"name": "Copy Test Data",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Get trigger information",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -53,164 +46,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "PreserveHierarchy"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".csv"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "MONTH_REPORTED",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MONTH_REPORTED",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "STATE",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "STATE",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "MAKE",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MAKE",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "MODEL",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MODEL",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "COLOR",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "COLOR",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "YEAR",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "YEAR",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "LAST_INSPECTION_MONTH",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "LAST_INSPECTION_MONTH",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "NUMBER_OF_TRIPS",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "NUMBER_OF_TRIPS",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "MULTIPLE_TNPS",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MULTIPLE_TNPS",
-									"type": "String",
-									"physicalType": "String"
-								}
-							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": true
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "VehicleSet",
-						"type": "DatasetReference",
-						"parameters": {
-							"directory": "@pipeline().parameters.file"
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "StagedVehicle",
-						"type": "DatasetReference"
-					}
-				]
+					"enableStaging": false
+				}
 			}
 		],
 		"concurrency": 1,
