@@ -17,7 +17,11 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "VehicleSet",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": "temp",
+							"container": "dev"
+						}
 					},
 					"fieldList": [],
 					"storeSettings": {
