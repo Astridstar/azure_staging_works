@@ -1,0 +1,17 @@
+{
+	"name": "VEHICLE_INSPECTION",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [dbo].[VEHICLE_INSPECTION] (\n    [MONTH_REPORTED]        NVARCHAR (10) NOT NULL,\n    [STATE]                 CHAR (10)     NOT NULL,\n    [MAKE]                  NVARCHAR (50) NULL,\n    [MODEL]                 NVARCHAR (50) NULL,\n    [COLOR]                 NVARCHAR (50) NULL,\n    [YEAR]                  SMALLINT      NULL,\n    [LAST_INSPECTION_MONTH] NVARCHAR (10) NOT NULL,\n    [NUMBER_OF_TRIPS]       SMALLINT      NULL,\n    [MULTIPLE_TNPS]         BINARY (1)    NULL\n)\nWITH (HEAP, DISTRIBUTION = ROUND_ROBIN);\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "datawarehouse",
+				"poolName": "datawarehouse"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
