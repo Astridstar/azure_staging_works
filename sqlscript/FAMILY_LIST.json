@@ -1,0 +1,17 @@
+{
+	"name": "FAMILY_LIST",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [dbo].[FAMILY_LIST] (\n    [OWNER_ID]              VARCHAR (50) NOT NULL,\n    [PARENT_ID_01]          VARCHAR (50) NULL,\n    [PARENT_NAME_01]        VARCHAR (50) NULL,\n    [PARENT_BIRTHDATE_01]   DATE         NULL,\n    [PARENT_NATIONALITY_01] VARCHAR (50) NULL,\n    [PARENT_ID_02]          VARCHAR (50) NULL,\n    [PARENT_NAME_02]        VARCHAR (50) NULL,\n    [PARENT_BIRTHDATE_02]   VARCHAR (50) NULL,\n    [PARENT_NATIONALITY_02] DATE         NULL,\n    CONSTRAINT [PK_FAMILY_LIST] PRIMARY KEY NONCLUSTERED ([OWNER_ID] ASC) NOT ENFORCED\n)\nWITH (HEAP, DISTRIBUTION = ROUND_ROBIN);\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "datawarehouse",
+				"poolName": "datawarehouse"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
