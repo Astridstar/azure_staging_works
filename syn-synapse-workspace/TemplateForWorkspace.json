@@ -47,40 +47,170 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Get Vehicle Inspection Records",
-						"type": "ExecuteDataFlow",
+						"name": "IngestVehicleInspection",
+						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "0.00:30:00",
-							"retry": 1,
+							"timeout": "7.00:00:00",
+							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Vehicle Inspection Data Flow",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"VehicleInspectionSource": {},
-									"VehicleInspectionSink": {}
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
 								}
 							},
-							"staging": {
-								"linkedService": {
-									"referenceName": "VehLandingZone",
-									"type": "LinkedServiceReference"
-								},
-								"folderPath": "staged"
+							"sink": {
+								"type": "SqlDWSink",
+								"writeBehavior": "Insert",
+								"sqlWriterUseTableLock": true,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
 							},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "MONTH_REPORTED",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MONTH_REPORTED",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "STATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "STATE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MAKE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MAKE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MODEL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MODEL",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "COLOR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "COLOR",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "YEAR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YEAR",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LAST_INSPECTION_MONTH",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "LAST_INSPECTION_MONTH",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "NUMBER_OF_TRIPS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NUMBER_OF_TRIPS",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MULTIPLE_TNPS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MULTIPLE_TNPS",
+											"type": "String",
+											"physicalType": "String"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "VehicleInspection",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "vehinspect",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -100,9 +230,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/Vehicle Inspection Data Flow')]",
-				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/datasets/VehicleInspection')]",
+				"[concat(variables('workspaceId'), '/datasets/vehinspect')]"
 			]
 		},
 		{
@@ -473,6 +602,299 @@
 			},
 			"dependsOn": [],
 			"location": "australiaeast"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE [dbo].[VEHICLE_INSPECTION] (\n    [MONTH_REPORTED]        NVARCHAR (10) NOT NULL,\n    [STATE]                 CHAR (10)     NOT NULL,\n    [MAKE]                  NVARCHAR (50) NULL,\n    [MODEL]                 NVARCHAR (50) NULL,\n    [COLOR]                 NVARCHAR (50) NULL,\n    [YEAR]                  SMALLINT      NULL,\n    [LAST_INSPECTION_MONTH] NVARCHAR (10) NOT NULL,\n    [NUMBER_OF_TRIPS]       SMALLINT      NULL,\n    [MULTIPLE_TNPS]         BINARY (1)    NULL,\n    [ID]                    INT           IDENTITY (1, 1) NOT NULL,\n    CONSTRAINT [PK_VEHICLE_INSPECTION] PRIMARY KEY NONCLUSTERED ([ID] ASC) NOT ENFORCED\n)\nWITH (HEAP, DISTRIBUTION = ROUND_ROBIN);\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "datawarehouse",
+						"poolName": "datawarehouse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "DROP TABLE [dbo].[VEHICLE_INSPECTION]\nGO\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "datawarehouse",
+						"poolName": "datawarehouse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [MONTH_REPORTED]\n,[STATE]\n,[MAKE]\n,[MODEL]\n,[COLOR]\n,[YEAR]\n,[LAST_INSPECTION_MONTH]\n,[NUMBER_OF_TRIPS]\n,[MULTIPLE_TNPS]\n,[ID]\n FROM [dbo].[VEHICLE_INSPECTION]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "datawarehouse",
+						"poolName": "datawarehouse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/processVehicleInspection_copy1')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Vehicle Inspection Records",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:30:00",
+							"retry": 1,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Vehicle Inspection Data Flow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VehicleInspectionSource": {},
+									"VehicleInspectionSink": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "VehLandingZone",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "staged"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "IngestVehicleInspection",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"writeBehavior": "Insert",
+								"sqlWriterUseTableLock": true,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "MONTH_REPORTED",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MONTH_REPORTED",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "STATE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "STATE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MAKE",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MAKE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MODEL",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MODEL",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "COLOR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "COLOR",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "YEAR",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YEAR",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LAST_INSPECTION_MONTH",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "LAST_INSPECTION_MONTH",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "NUMBER_OF_TRIPS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NUMBER_OF_TRIPS",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MULTIPLE_TNPS",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MULTIPLE_TNPS",
+											"type": "String",
+											"physicalType": "String"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "VehicleInspection",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "vehinspect",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"directory": {
+						"type": "string",
+						"defaultValue": "@triggerBody.folderPath"
+					},
+					"file": {
+						"type": "string",
+						"defaultValue": "@triggerBody().fileName"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/Vehicle Inspection Data Flow')]",
+				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/datasets/VehicleInspection')]",
+				"[concat(variables('workspaceId'), '/datasets/vehinspect')]"
+			]
 		}
 	]
 }
