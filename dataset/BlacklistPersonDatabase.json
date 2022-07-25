@@ -1,0 +1,77 @@
+{
+	"name": "BlacklistPersonDatabase",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [
+			{
+				"name": "SUBJECT_NO",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "GENDER",
+				"type": "char"
+			},
+			{
+				"name": "MODIFIED_DATETIME",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "DOB",
+				"type": "date"
+			},
+			{
+				"name": "NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "NATIONALITY_CD",
+				"type": "varchar"
+			},
+			{
+				"name": "ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "DATE_ISSUE",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "DATE_EXPIRE",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "LICENSE_PLATE",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_MODEL",
+				"type": "varchar"
+			},
+			{
+				"name": "VEHICLE_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "REG_DATE",
+				"type": "datetime2",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BLACKLIST_PERSON"
+		},
+		"sqlPool": {
+			"referenceName": "datawarehouse",
+			"type": "SqlPoolReference"
+		}
+	}
+}
