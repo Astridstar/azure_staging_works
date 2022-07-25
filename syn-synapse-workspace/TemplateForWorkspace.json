@@ -51,7 +51,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "0.00:10:00",
+							"timeout": "0.00:30:00",
 							"retry": 1,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
@@ -60,12 +60,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Vehicle Inspection Source",
+								"referenceName": "Vehicle Inspection Data Flow",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
 									"VehicleInspectionSource": {},
-									"sink1": {}
+									"VehicleInspectionSink": {}
 								}
 							},
 							"staging": {
@@ -79,10 +79,7 @@
 								"coreCount": 8,
 								"computeType": "General"
 							},
-							"traceLevel": "Fine",
-							"continuationSettings": {
-								"customizedCheckpointKey": "1e4b31aa-2431-4f1f-8ade-f2d2eb3f0cff"
-							}
+							"traceLevel": "Fine"
 						}
 					}
 				],
@@ -103,9 +100,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/Vehicle Inspection Source')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
-				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]"
+				"[concat(variables('workspaceId'), '/dataflows/Vehicle Inspection Data Flow')]",
+				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -336,7 +333,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Vehicle Inspection Source')]",
+			"name": "[concat(parameters('workspaceName'), '/Vehicle Inspection Data Flow')]",
 			"type": "Microsoft.Synapse/workspaces/dataflows",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -357,7 +354,7 @@
 								"referenceName": "vehinspect",
 								"type": "DatasetReference"
 							},
-							"name": "sink1",
+							"name": "VehicleInspectionSink",
 							"rejectedDataLinkedService": {
 								"referenceName": "VehLandingZone",
 								"type": "LinkedServiceReference"
@@ -382,10 +379,8 @@
 						"     inferDriftedColumnTypes: true,",
 						"     limit: 10,",
 						"     ignoreNoFilesFound: true,",
-						"     enableCdc: true,",
-						"     mode: 'read',",
-						"     skipInitialLoad: false,",
-						"     rowUrlColumn: 'FILENAME') ~> VehicleInspectionSource",
+						"     rowUrlColumn: 'FILENAME',",
+						"     mode: 'read') ~> VehicleInspectionSource",
 						"VehicleInspectionSource sink(allowSchemaDrift: true,",
 						"     validateSchema: true,",
 						"     deletable:false,",
@@ -412,7 +407,7 @@
 						"          NUMBER_OF_TRIPS,",
 						"          MULTIPLE_TNPS,",
 						"          FILENAME",
-						"     )) ~> sink1"
+						"     )) ~> VehicleInspectionSink"
 					]
 				}
 			},
