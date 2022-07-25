@@ -1,5 +1,5 @@
 {
-	"name": "Vehicle Inspection Source",
+	"name": "Vehicle Inspection Data Flow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
