@@ -38,6 +38,10 @@
 		"BlacklistPersonIngestionTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
+		},
+		"FamilyIngestionTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
 		}
 	},
 	"variables": {
@@ -1245,6 +1249,229 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/pipelines/ingestBlacklistPerson')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/FamilySource')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "VehLandingZone",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "FAMILY_LIST.csv",
+						"folderPath": "family",
+						"fileSystem": "landingzone"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ID",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_ID_01",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_NAME_01",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_BIRTHDATE_01",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_NATIONALITY_01",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_RACE_01",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_ID_02",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_NAME_02",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_BIRTHDATE_02",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_NATIONALITY_02",
+						"type": "String"
+					},
+					{
+						"name": "PARENT_RACE_02",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/FamilyDatabase')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "FAMILY_LIST"
+				},
+				"sqlPool": {
+					"referenceName": "datawarehouse",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/datawarehouse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ingestFamily')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestFamily",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								},
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "VehLandingZone",
+									"type": "LinkedServiceReference"
+								},
+								"path": "staged"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "FamilySource",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "FamilyDatabase",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/FamilySource')]",
+				"[concat(variables('workspaceId'), '/datasets/FamilyDatabase')]",
+				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/FAMILY_LIST')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE [dbo].[FAMILY_LIST] (\n    [OWNER_ID]              VARCHAR (50) NOT NULL,\n    [PARENT_ID_01]          VARCHAR (50) NULL,\n    [PARENT_NAME_01]        VARCHAR (50) NULL,\n    [PARENT_BIRTHDATE_01]   DATE         NULL,\n    [PARENT_NATIONALITY_01] VARCHAR (50) NULL,\n    [PARENT_ID_02]          VARCHAR (50) NULL,\n    [PARENT_NAME_02]        VARCHAR (50) NULL,\n    [PARENT_BIRTHDATE_02]   VARCHAR (50) NULL,\n    [PARENT_NATIONALITY_02] DATE         NULL,\n    CONSTRAINT [PK_FAMILY_LIST] PRIMARY KEY NONCLUSTERED ([OWNER_ID] ASC) NOT ENFORCED\n)\nWITH (HEAP, DISTRIBUTION = ROUND_ROBIN);\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "datawarehouse",
+						"poolName": "datawarehouse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/FamilyIngestionTrigger')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ingestFamily",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/landingzone/blobs/family/",
+					"blobPathEndsWith": "csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('FamilyIngestionTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/ingestFamily')]"
 			]
 		}
 	]
