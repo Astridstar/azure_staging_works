@@ -13,12 +13,6 @@
 					"directory": "@triggerBody().folderPath",
 					"file": "@triggerBody().fileName"
 				}
-			},
-			{
-				"pipelineReference": {
-					"referenceName": "IngestVehicleInspection",
-					"type": "PipelineReference"
-				}
 			}
 		],
 		"type": "BlobEventsTrigger",
