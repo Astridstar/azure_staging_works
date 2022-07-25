@@ -34,6 +34,10 @@
 		"VehLandindZoneTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
+		},
+		"BlacklistPersonIngestionTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Storage/storageAccounts/synsqq267aknc6xi"
 		}
 	},
 	"variables": {
@@ -604,66 +608,6 @@
 			"location": "australiaeast"
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "CREATE TABLE [dbo].[VEHICLE_INSPECTION] (\n    [MONTH_REPORTED]        NVARCHAR (10) NOT NULL,\n    [STATE]                 CHAR (10)     NOT NULL,\n    [MAKE]                  NVARCHAR (50) NULL,\n    [MODEL]                 NVARCHAR (50) NULL,\n    [COLOR]                 NVARCHAR (50) NULL,\n    [YEAR]                  SMALLINT      NULL,\n    [LAST_INSPECTION_MONTH] NVARCHAR (10) NOT NULL,\n    [NUMBER_OF_TRIPS]       SMALLINT      NULL,\n    [MULTIPLE_TNPS]         BINARY (1)    NULL,\n    [ID]                    INT           IDENTITY (1, 1) NOT NULL,\n    CONSTRAINT [PK_VEHICLE_INSPECTION] PRIMARY KEY NONCLUSTERED ([ID] ASC) NOT ENFORCED\n)\nWITH (HEAP, DISTRIBUTION = ROUND_ROBIN);\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "datawarehouse",
-						"poolName": "datawarehouse"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "DROP TABLE [dbo].[VEHICLE_INSPECTION]\nGO\n\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "datawarehouse",
-						"poolName": "datawarehouse"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "SELECT TOP (100) [MONTH_REPORTED]\n,[STATE]\n,[MAKE]\n,[MODEL]\n,[COLOR]\n,[YEAR]\n,[LAST_INSPECTION_MONTH]\n,[NUMBER_OF_TRIPS]\n,[MULTIPLE_TNPS]\n,[ID]\n FROM [dbo].[VEHICLE_INSPECTION]",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "datawarehouse",
-						"poolName": "datawarehouse"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/processVehicleInspection_copy1')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -894,6 +838,433 @@
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('workspaceId'), '/datasets/VehicleInspection')]",
 				"[concat(variables('workspaceId'), '/datasets/vehinspect')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ingestBlacklistPerson')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestBlacklistPersons",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								},
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "VehLandingZone",
+									"type": "LinkedServiceReference"
+								},
+								"path": "staged"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "SUBJECT_NO",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SUBJECT_NO"
+										}
+									},
+									{
+										"source": {
+											"name": "GENDER",
+											"type": "String"
+										},
+										"sink": {
+											"name": "GENDER"
+										}
+									},
+									{
+										"source": {
+											"name": "MODIFIED_DATETIME",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MODIFIED_DATETIME"
+										}
+									},
+									{
+										"source": {
+											"name": "DOB",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DOB"
+										}
+									},
+									{
+										"source": {
+											"name": "NAME",
+											"type": "String"
+										},
+										"sink": {
+											"name": "NAME"
+										}
+									},
+									{
+										"source": {
+											"name": "NATIONALITY_CD",
+											"type": "String"
+										},
+										"sink": {
+											"name": "NATIONALITY_CD"
+										}
+									},
+									{
+										"source": {
+											"name": "ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ID"
+										}
+									},
+									{
+										"source": {
+											"name": "ID_TYPE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ID_TYPE"
+										}
+									},
+									{
+										"source": {
+											"name": "DATE_ISSUE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DATE_ISSUE"
+										}
+									},
+									{
+										"source": {
+											"name": "DATE_EXPIRE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DATE_EXPIRE"
+										}
+									},
+									{
+										"source": {
+											"name": "LICENSE_PLATE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "LICENSE_PLATE"
+										}
+									},
+									{
+										"source": {
+											"name": "VEHICLE_MODEL",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VEHICLE_MODEL"
+										}
+									},
+									{
+										"source": {
+											"name": "VEHICLE_TYPE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VEHICLE_TYPE"
+										}
+									},
+									{
+										"source": {
+											"name": "REG_DATE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "REG_DATE"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "BlacklistPersonSource",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "BlacklistPersonDatabase",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/BlacklistPersonSource')]",
+				"[concat(variables('workspaceId'), '/datasets/BlacklistPersonDatabase')]",
+				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BlacklistPersonSource')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "VehLandingZone",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "*.csv",
+						"folderPath": "persons",
+						"fileSystem": "landingzone"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "SUBJECT_NO",
+						"type": "String"
+					},
+					{
+						"name": "GENDER",
+						"type": "String"
+					},
+					{
+						"name": "MODIFIED_DATETIME",
+						"type": "String"
+					},
+					{
+						"name": "DOB",
+						"type": "String"
+					},
+					{
+						"name": "NAME",
+						"type": "String"
+					},
+					{
+						"name": "NATIONALITY_CD",
+						"type": "String"
+					},
+					{
+						"name": "ID",
+						"type": "String"
+					},
+					{
+						"name": "ID_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "DATE_ISSUE",
+						"type": "String"
+					},
+					{
+						"name": "DATE_EXPIRE",
+						"type": "String"
+					},
+					{
+						"name": "LICENSE_PLATE",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_MODEL",
+						"type": "String"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "String"
+					},
+					{
+						"name": "REG_DATE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/VehLandingZone')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BlacklistPersonDatabase')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [
+					{
+						"name": "SUBJECT_NO",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "GENDER",
+						"type": "char"
+					},
+					{
+						"name": "MODIFIED_DATETIME",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "DOB",
+						"type": "date"
+					},
+					{
+						"name": "NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "NATIONALITY_CD",
+						"type": "varchar"
+					},
+					{
+						"name": "ID",
+						"type": "varchar"
+					},
+					{
+						"name": "ID_TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "DATE_ISSUE",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "DATE_EXPIRE",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "LICENSE_PLATE",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_MODEL",
+						"type": "varchar"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "REG_DATE",
+						"type": "datetime2",
+						"scale": 7
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "BLACKLIST_PERSON"
+				},
+				"sqlPool": {
+					"referenceName": "datawarehouse",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/datawarehouse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "DROP TABLE [dbo].[BLACKLIST_PERSON]\nGO\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "datawarehouse",
+						"poolName": "datawarehouse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BlacklistPersonIngestionTrigger')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ingestBlacklistPerson",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/landingzone/blobs/persons/",
+					"blobPathEndsWith": "csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('BlacklistPersonIngestionTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/ingestBlacklistPerson')]"
 			]
 		}
 	]
