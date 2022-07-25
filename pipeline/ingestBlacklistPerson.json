@@ -36,7 +36,14 @@
 						},
 						"tableOption": "autoCreate"
 					},
-					"enableStaging": false,
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "VehLandingZone",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staged"
+					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
