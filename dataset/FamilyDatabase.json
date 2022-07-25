@@ -1,0 +1,16 @@
+{
+	"name": "FamilyDatabase",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "FAMILY_LIST"
+		},
+		"sqlPool": {
+			"referenceName": "datawarehouse",
+			"type": "SqlPoolReference"
+		}
+	}
+}

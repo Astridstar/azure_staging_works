@@ -1,0 +1,81 @@
+{
+	"name": "BlacklistPersonSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VehLandingZone",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "BLACK_LIST.csv",
+				"folderPath": "persons",
+				"fileSystem": "landingzone"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "SUBJECT_NO",
+				"type": "String"
+			},
+			{
+				"name": "GENDER",
+				"type": "String"
+			},
+			{
+				"name": "MODIFIED_DATETIME",
+				"type": "String"
+			},
+			{
+				"name": "DOB",
+				"type": "String"
+			},
+			{
+				"name": "NAME",
+				"type": "String"
+			},
+			{
+				"name": "NATIONALITY_CD",
+				"type": "String"
+			},
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "ID_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "DATE_ISSUE",
+				"type": "String"
+			},
+			{
+				"name": "DATE_EXPIRE",
+				"type": "String"
+			},
+			{
+				"name": "LICENSE_PLATE",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_MODEL",
+				"type": "String"
+			},
+			{
+				"name": "VEHICLE_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "REG_DATE",
+				"type": "String"
+			}
+		]
+	}
+}

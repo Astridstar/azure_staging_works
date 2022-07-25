@@ -1,0 +1,195 @@
+{
+	"name": "ingestBlacklistPerson",
+	"properties": {
+		"activities": [
+			{
+				"name": "IngestBlacklistPersons",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						},
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "VehLandingZone",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staged"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SUBJECT_NO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBJECT_NO"
+								}
+							},
+							{
+								"source": {
+									"name": "GENDER",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GENDER"
+								}
+							},
+							{
+								"source": {
+									"name": "MODIFIED_DATETIME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MODIFIED_DATETIME"
+								}
+							},
+							{
+								"source": {
+									"name": "DOB",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DOB"
+								}
+							},
+							{
+								"source": {
+									"name": "NAME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME"
+								}
+							},
+							{
+								"source": {
+									"name": "NATIONALITY_CD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NATIONALITY_CD"
+								}
+							},
+							{
+								"source": {
+									"name": "ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_TYPE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ID_TYPE"
+								}
+							},
+							{
+								"source": {
+									"name": "DATE_ISSUE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATE_ISSUE"
+								}
+							},
+							{
+								"source": {
+									"name": "DATE_EXPIRE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATE_EXPIRE"
+								}
+							},
+							{
+								"source": {
+									"name": "LICENSE_PLATE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LICENSE_PLATE"
+								}
+							},
+							{
+								"source": {
+									"name": "VEHICLE_MODEL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VEHICLE_MODEL"
+								}
+							},
+							{
+								"source": {
+									"name": "VEHICLE_TYPE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VEHICLE_TYPE"
+								}
+							},
+							{
+								"source": {
+									"name": "REG_DATE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REG_DATE"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "BlacklistPersonSource",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "BlacklistPersonDatabase",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
