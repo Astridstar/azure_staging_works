@@ -7,7 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
-					"timeout": "0.00:10:00",
+					"timeout": "0.00:30:00",
 					"retry": 1,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Vehicle Inspection Source",
+						"referenceName": "Vehicle Inspection Data Flow",
 						"type": "DataFlowReference"
 					},
 					"staging": {
@@ -30,10 +30,7 @@
 						"coreCount": 8,
 						"computeType": "General"
 					},
-					"traceLevel": "Fine",
-					"continuationSettings": {
-						"customizedCheckpointKey": "1e4b31aa-2431-4f1f-8ade-f2d2eb3f0cff"
-					}
+					"traceLevel": "Fine"
 				}
 			}
 		],
