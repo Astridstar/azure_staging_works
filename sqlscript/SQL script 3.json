@@ -2,7 +2,7 @@
 	"name": "SQL script 3",
 	"properties": {
 		"content": {
-			"query": "SELECT TOP (100) [MONTH_REPORTED]\n,[STATE]\n,[MAKE]\n,[MODEL]\n,[COLOR]\n,[YEAR]\n,[LAST_INSPECTION_MONTH]\n,[NUMBER_OF_TRIPS]\n,[MULTIPLE_TNPS]\n,[ID]\n FROM [dbo].[VEHICLE_INSPECTION]",
+			"query": "SELECT TOP (100) [MONTH_REPORTED]\n,[STATE]\n,[MAKE]\n,[MODEL]\n,[COLOR]\n,[YEAR]\n,[LAST_INSPECTION_MONTH]\n,[NUMBER_OF_TRIPS]\n FROM [dbo].[VEHICLE_INSPECTION]",
 			"metadata": {
 				"language": "sql"
 			},
