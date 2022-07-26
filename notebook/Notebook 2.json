@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3eea6b1b-593b-48f8-ac28-ca62ccf66bf7"
+				"spark.autotune.trackingId": "23ca652f-487f-4f54-9287-3c08081d03d0"
 			}
 		},
 		"metadata": {
@@ -104,14 +104,7 @@
 					"\r\n",
 					"import sys\r\n",
 					"import traceback\r\n",
-					"import asyncio\r\n",
-					"\r\n",
-					"client = client.Client('wss://<YOUR_ENDPOINT>.gremlin.cosmos.azure.com:443/', 'g',\r\n",
-					"                        username=\"/dbs/<YOUR_DATABASE>/colls/<YOUR_COLLECTION_OR_GRAPH>\",\r\n",
-					"                        password=\"<YOUR_PASSWORD>\",\r\n",
-					"                        message_serializer=serializer.GraphSONSerializersV2d0()\r\n",
-					"                        )\r\n",
-					""
+					"import asyncio"
 				],
 				"execution_count": 4
 			},
@@ -205,6 +198,50 @@
 					""
 				],
 				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"end_point=''\r\n",
+					"database=''\r\n",
+					"graph_col=''\r\n",
+					"password=''"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"client = client.Client(f\"wss://{end_point}}.gremlin.cosmos.azure.com:443/\", 'g',\r\n",
+					"                        username=f\"/dbs/{database}/colls/{graph_col}\",\r\n",
+					"                        password=f\"{password}\",\r\n",
+					"                        message_serializer=serializer.GraphSONSerializersV2d0()\r\n",
+					"                        )\r\n",
+					""
+				],
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
