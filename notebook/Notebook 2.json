@@ -1,0 +1,253 @@
+{
+	"name": "Notebook 2",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "3eea6b1b-593b-48f8-ac28-ca62ccf66bf7"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/0898411e-cf58-45f1-822f-5b65523e4b6d/resourceGroups/gilgamesh/providers/Microsoft.Synapse/workspaces/syn-synapse-workspace/bigDataPools/sparkpool",
+				"name": "sparkpool",
+				"type": "Spark",
+				"endpoint": "https://syn-synapse-workspace.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"microsoft": {
+						"language": "scala"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%spark\n",
+					"val bldf = spark.read.synapsesql(\"datawarehouse.dbo.BLACKLIST_PERSON\") \n",
+					"//df.write.mode(\"overwrite\").saveAsTable(\"default.t1\")\n",
+					"//bldf.printSchema()\n",
+					"\n",
+					"display(bldf.groupBy(\"gender\").count())"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"pip install gremlinpython, futures"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import gremlin_python\r\n",
+					"from gremlin_python.driver import client, serializer, protocol\r\n",
+					"from gremlin_python.driver.protocol import GremlinServerError\r\n",
+					"\r\n",
+					"import sys\r\n",
+					"import traceback\r\n",
+					"import asyncio\r\n",
+					"\r\n",
+					"client = client.Client('wss://<YOUR_ENDPOINT>.gremlin.cosmos.azure.com:443/', 'g',\r\n",
+					"                        username=\"/dbs/<YOUR_DATABASE>/colls/<YOUR_COLLECTION_OR_GRAPH>\",\r\n",
+					"                        password=\"<YOUR_PASSWORD>\",\r\n",
+					"                        message_serializer=serializer.GraphSONSerializersV2d0()\r\n",
+					"                        )\r\n",
+					""
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"_gremlin_cleanup_graph = \"g.V().drop()\"\r\n",
+					"\r\n",
+					"_gremlin_insert_vertices = [\r\n",
+					"    \"g.addV('person').property('id', 'thomas').property('firstName', 'Thomas').property('age', 44).property('pk', 'pk')\",\r\n",
+					"    \"g.addV('person').property('id', 'mary').property('firstName', 'Mary').property('lastName', 'Andersen').property('age', 39).property('pk', 'pk')\",\r\n",
+					"    \"g.addV('person').property('id', 'ben').property('firstName', 'Ben').property('lastName', 'Miller').property('pk', 'pk')\",\r\n",
+					"    \"g.addV('person').property('id', 'robin').property('firstName', 'Robin').property('lastName', 'Wakefield').property('pk', 'pk')\"\r\n",
+					"]\r\n",
+					"\r\n",
+					"_gremlin_insert_edges = [\r\n",
+					"    \"g.V('thomas').addE('knows').to(g.V('mary'))\",\r\n",
+					"    \"g.V('thomas').addE('knows').to(g.V('ben'))\",\r\n",
+					"    \"g.V('ben').addE('knows').to(g.V('robin'))\"\r\n",
+					"]\r\n",
+					""
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def cleanup_graph(client):\r\n",
+					"    print(\"\\n> {0}\".format(\r\n",
+					"        _gremlin_cleanup_graph))\r\n",
+					"    callback = client.submitAsync(_gremlin_cleanup_graph)\r\n",
+					"    if callback.result() is not None:\r\n",
+					"        callback.result().all().result() \r\n",
+					"    print(\"\\n\")\r\n",
+					"    print_status_attributes(callback.result())\r\n",
+					"    print(\"\\n\")\r\n",
+					""
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def insert_vertices(client):\r\n",
+					"    for query in _gremlin_insert_vertices:\r\n",
+					"        print(\"\\n> {0}\\n\".format(query))\r\n",
+					"        callback = client.submitAsync(query)\r\n",
+					"        if callback.result() is not None:\r\n",
+					"            print(\"\\tInserted this vertex:\\n\\t{0}\".format(\r\n",
+					"                callback.result().all().result()))\r\n",
+					"        else:\r\n",
+					"            print(\"Something went wrong with this query: {0}\".format(query))\r\n",
+					"        print(\"\\n\")\r\n",
+					"        print_status_attributes(callback.result())\r\n",
+					"        print(\"\\n\")\r\n",
+					"\r\n",
+					"    print(\"\\n\")\r\n",
+					""
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Drop the entire Graph\r\n",
+					"#input(\"We're about to drop whatever graph is on the server. Press any key to continue...\")\r\n",
+					"cleanup_graph(client)\r\n",
+					""
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Insert all vertices\r\n",
+					"#input(\"Let's insert some vertices into the graph. Press any key to continue...\")\r\n",
+					"insert_vertices(client)\r\n",
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
