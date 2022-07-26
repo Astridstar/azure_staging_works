@@ -1,0 +1,171 @@
+[
+    // In each event, multiple objects, vehciles and persons can be detected
+    // Each vehicle will have their individual properties
+    // Each object will have their own individual properties
+    // Each person will have their own objects and these objects will have their own properties
+	{
+		"EVENT": {
+			"ID": "KMHTC6AD8EU666642",  // Unique identifier of the event
+			"EVENT_OCCURANCE_DT": "2021-12-17 01:48:53", // timestamp of the analysis or event detection
+			"LOCATION_LAT": 30.582271, 
+			"LOCATION_LONG": 114.029327
+		},
+		"OBJECTS": [
+			{
+				"ID": "YV1672MC5CJ217977", // ID of the object can be index or primary key pointing to an object
+				"DESCRIPTION": "GLASSES",  // Pureply for description purposes only
+				"PROPERTIES": [
+					{
+						"ID": "3FA6P0D9XDR670293", // Identitifer for the property
+						"DESCRIPTION": "Crimson"    // This field is purely used to describe or support
+					}
+				]
+			},
+			{
+				"ID": "WAUVT68E33A523556",
+				"DESCRIPTION": "BAG",
+				"PROPERTIES": [
+					{
+						"ID": "1N6AA0CA7EN099574",
+						"DESCRIPTION": "Maroon"
+					}
+				]
+			}
+		],
+		"VEHICLES": [
+			{
+				"LICENSE_PLATE": "RVG1496M", // License plate number of the detected vehicle
+				"PROPERTY": {                   // Holds the property of the vehicle
+					"ID": "WBAHN03526D878023",  // Idedntifier to the property, e.g. color
+					"DESCRIPTION": "Yellow",    // Purely used for desciption of the property only
+					"MAKE": "Mazda",            // If possible, the make of the car (eg Suzuki)
+					"MODEL": "Miata MX-5"       // If possible, the model of the car (e.g. Swift)
+				}
+			},
+			{
+				"LICENSE_PLATE": "THZ9824T",
+				"PROPERTY": {
+					"ID": "W04GV5EV4B1413550",
+					"DESCRIPTION": "Yellow",
+					"MAKE": "Rolls-Royce",
+					"MODEL": "Ghost"
+				}
+			},
+			{
+				"LICENSE_PLATE": "NYO8970V",
+				"PROPERTY": {
+					"ID": "WAU3VAFR9CA249659",
+					"DESCRIPTION": "Mauv",
+					"MAKE": "Dodge",
+					"MODEL": "Ram 2500"
+				}
+			}
+		],
+		"PERSONS": [
+			{
+				"ID": "599-29-8175",                    // Most likely to be NRIC number
+				"FULLNAME": "Christabella Sutworth",    // Name of the identified person
+				"OBJECTS": [                            // Objects associated with the peron, eg. mask on the person
+					{
+						"ID": "1FTSF3B53AE242879",
+						"DESCRIPTION": "GLASSES",
+						"PROPERTY": {
+							"ID": "WBAFU9C54CC350936",
+							"DESCRIPTION": "Orange"
+						}
+					}
+				]
+			},
+			{
+				"ID": "311-71-4528",
+				"FULLNAME": "Siobhan Coulthard",
+				"OBJECTS": [
+					{
+						"ID": "JA4AD3A35FZ838994",
+						"DESCRIPTION": "BACKPACK",
+						"PROPERTY": {
+							"ID": "TRURD38J281273849",
+							"DESCRIPTION": "Turquoise"
+						}
+					},
+					{
+						"ID": "WA1AV74L57D336047",
+						"DESCRIPTION": "BAG",
+						"PROPERTY": {
+							"ID": "1G6DG8EY6B0912583",
+							"DESCRIPTION": "Fuscia"
+						}
+					},
+					{
+						"ID": "1FTEW1E88AF262921",
+						"DESCRIPTION": "GLASSES",
+						"PROPERTY": {
+							"ID": "JN1AY1AP9BM955733",
+							"DESCRIPTION": "Aquamarine"
+						}
+					},
+					{
+						"ID": "5FRYD4H97GB207609",
+						"DESCRIPTION": "KNIFE",
+						"PROPERTY": {
+							"ID": "WBANE735X7B214481",
+							"DESCRIPTION": "Turquoise"
+						}
+					},
+					{
+						"ID": "1N6AD0CW7EN408186",
+						"DESCRIPTION": "BAT",
+						"PROPERTY": {
+							"ID": "1G4GJ5E3XDF342761",
+							"DESCRIPTION": "Turquoise"
+						}
+					}
+				]
+			},
+			{
+				"ID": "362-44-2002",
+				"FULLNAME": "Evin Denk",
+				"OBJECTS": [
+					{
+						"ID": "YV126MFB4F1945182",
+						"DESCRIPTION": "BACKPACK",
+						"PROPERTY": {
+							"ID": "1GYFK53219R612824",
+							"DESCRIPTION": "Fuscia"
+						}
+					}
+				]
+			},
+			{
+				"ID": "836-25-4103",
+				"FULLNAME": "Nobe Leupoldt",
+				"OBJECTS": [
+					{
+						"ID": "3GYFNAE37DS389216",
+						"DESCRIPTION": "BAT",
+						"PROPERTY": {
+							"ID": "WAUBF78E18A246039",
+							"DESCRIPTION": "Blue"
+						}
+					},
+					{
+						"ID": "5NPDH4AE9BH396916",
+						"DESCRIPTION": "MASK",
+						"PROPERTY": {
+							"ID": "WAUPEBFM8DA240531",
+							"DESCRIPTION": "Red"
+						}
+					},
+					{
+						"ID": "WAUBF78E07A464939",
+						"DESCRIPTION": "BAG",
+						"PROPERTY": {
+							"ID": "WAUAFAFL9FN588242",
+							"DESCRIPTION": "Green"
+						}
+					}
+				]
+			}
+		]
+	}
+]
