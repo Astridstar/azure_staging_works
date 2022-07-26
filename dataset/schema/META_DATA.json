@@ -1,0 +1,49 @@
+[
+	{
+		"EVENT": {
+			"ID": "KMHTC6AD8EU666642",
+			"EVENT_OCCURANCE_DT": "2021-12-17 01:48:53",
+			"LOCATION_LAT": 30.582271,
+			"LOCATION_LONG": 114.029327
+		},
+		"OBJECTS": [
+			{
+				"ID": "KMHCT4AE3FU359216",
+				"DESCRIPTION": "BAT",
+				"PROPERTIES": [
+					{
+						"ID": "1GYS4CEFXER251729",
+						"DESCRIPTION": "Orange"
+					}
+				]
+			}
+		],
+		"VEHICLES": [
+			{
+				"LICENSE_PLATE": "RVG1496M",
+				"PROPERTY": {
+					"ID": "WBAHN03526D878023",
+					"DESCRIPTION": "Yellow",
+					"MAKE": "Mazda",
+					"MODEL": "Miata MX-5"
+				}
+			}
+		],
+		"PERSONS": [
+			{
+				"ID": "599-29-8175",
+				"FULLNAME": "Christabella Sutworth",
+				"OBJECTS": [
+					{
+						"ID": "1FTSF3B53AE242879",
+						"DESCRIPTION": "GLASSES",
+						"PROPERTY": {
+							"ID": "WBAFU9C54CC350936",
+							"DESCRIPTION": "Orange"
+						}
+					}
+				]
+			}
+		]
+	}
+]
